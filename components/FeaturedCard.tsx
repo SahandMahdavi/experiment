@@ -80,14 +80,14 @@ export function FeaturedCard({
       style={[
         styles.bookmarkButton,
         isTablet ? styles.tabletBookmarkButton : styles.phoneBookmarkButton,
-        { backgroundColor: isBookmarked ? '#FF0000' : 'rgba(255, 255, 255, 0.2)' }
+        
       ]} 
       onPress={onBookmarkPress}
     >
       <IconSymbol
-        name="paperplane.fill" // Using available icon as bookmark placeholder
+        name="bookmark.fill" // Using available icon as bookmark placeholder
         size={24}
-        color={isTablet ? (theme === 'light' ? '#000000' : '#FFFFFF') : '#FFFFFF'}
+        color={isBookmarked ? '#FF0000' : 'rgba(255, 255, 255, 0.2)'}
       />
     </TouchableOpacity>
   );
@@ -181,7 +181,6 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -206,7 +205,6 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 12,
   },
   phoneContentContainer: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
   },
