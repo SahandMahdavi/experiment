@@ -34,24 +34,9 @@ export function ImageGallery({ items }: ImageGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollViewRef = useRef<ScrollView>(null);
   const { theme } = useThemeManager();
-  const [disableScrollListener, setDisableScrollListener] = useState(false);
 
-  // Synchronize ScrollView position when activeIndex changes from dot press
-  // useEffect(() => {
-  //   if (disableScrollListener) {
-  //     // scrollViewRef.current?.scrollTo({ x: width * activeIndex, animated: true });
-      
-  //     // Re-enable scroll listener after animation completes
-  //     const timer = setTimeout(() => {
-  //       setDisableScrollListener(false);
-  //     }, 500);
-      
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [activeIndex, disableScrollListener]);
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    if (disableScrollListener) return;
     
     const contentOffsetX = event.nativeEvent.contentOffset.x;
     const newIndex = Math.round(contentOffsetX / width);

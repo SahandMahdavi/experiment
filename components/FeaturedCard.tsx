@@ -15,7 +15,7 @@ import { IconSymbol } from './ui/IconSymbol';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
 
-const PHONE_BREAKPOINT = 768; // Typical tablet breakpoint
+const PHONE_BREAKPOINT = 600; // Typical tablet breakpoint
 
 type FeaturedCardProps = {
   image: string;
@@ -80,14 +80,14 @@ export function FeaturedCard({
       style={[
         styles.bookmarkButton,
         isTablet ? styles.tabletBookmarkButton : styles.phoneBookmarkButton,
-        
+        { zIndex: 1000 }
       ]} 
       onPress={onBookmarkPress}
     >
       <IconSymbol
-        name="bookmark.fill" // Using available icon as bookmark placeholder
+        name={isBookmarked ? 'bookmark.fill' : 'bookmark'} // Using available icon as bookmark placeholder
         size={24}
-        color={isBookmarked ? '#FF0000' : 'rgba(255, 255, 255, 0.2)'}
+        color={isBookmarked ? '#FF0000' : '#000000'}
       />
     </TouchableOpacity>
   );
@@ -158,7 +158,7 @@ export function FeaturedCard({
 const styles = StyleSheet.create({
   // Common styles
   image: {
-    borderRadius: 12,
+    
   },
   contentContainer: {
     gap: 8,
@@ -214,8 +214,10 @@ const styles = StyleSheet.create({
   
   // Tablet layout styles
   tabletContainer: {
+    marginHorizontal: 16, 
     flexDirection: 'row',
-    paddingHorizontal: 16,
+    // paddingHorizontal: 16,
+    paddingLeft: 16,
     marginBottom: 24,
     gap: 16,
   },
@@ -223,6 +225,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     paddingVertical: 16,
+    zIndex: 1000,
   },
   tabletTextContent: {
     flex: 1,
@@ -232,7 +235,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   tabletImageColumn: {
-    borderRadius: 12,
+
     overflow: 'hidden',
   }
 }); 

@@ -15,6 +15,8 @@ const MAPPING = {
   'chevron.right': 'chevron-right',
   'sun.max': 'wb-sunny',
   'moon': 'nights-stay',
+  'bookmark': 'bookmark',
+  'bookmark.fill': 'bookmark',
 } as Partial<
   Record<
     import('expo-symbols').SymbolViewProps['name'],
