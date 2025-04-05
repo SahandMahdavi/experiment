@@ -1,22 +1,17 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, useColorScheme as _useColorScheme } from 'react-native';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 import { ThemedView } from './ThemedView';
 import { ThemedText } from './ThemedText';
-import { useColorScheme } from '@/hooks/useColorScheme';
 import { IconSymbol } from './ui/IconSymbol';
 import { Colors } from '@/constants/Colors';
+import { useThemeManager } from '@/hooks/useThemeManager';
 
-type ThemeToggleProps = {
-  onToggle?: (theme: 'light' | 'dark') => void;
-};
-
-export function ThemeToggle({ onToggle }: ThemeToggleProps) {
-  const colorScheme = useColorScheme() ?? 'light';
+export function ThemeToggle() {
+  const { theme, setTheme } = useThemeManager();
+  
   const toggleColorScheme = () => {
-    const newTheme = colorScheme === 'light' ? 'dark' : 'light';
-    if (onToggle) {
-      onToggle(newTheme);
-    }
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
   };
 
   return (
@@ -26,12 +21,12 @@ export function ThemeToggle({ onToggle }: ThemeToggleProps) {
       activeOpacity={0.7}>
       <ThemedView style={styles.toggleContainer}>
         <IconSymbol
-          name={colorScheme === 'light' ? 'sun.max' : 'moon'}
+          name={theme === 'light' ? 'sun.max' : 'moon'}
           size={20}
-          color={colorScheme === 'light' ? Colors.light.icon : Colors.dark.icon}
+          color={theme === 'light' ? Colors.light.icon : Colors.dark.icon}
         />
         <ThemedText type="defaultSemiBold">
-          {colorScheme === 'light' ? 'Dark Mode' : 'Light Mode'}
+          {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
         </ThemedText>
       </ThemedView>
     </TouchableOpacity>
