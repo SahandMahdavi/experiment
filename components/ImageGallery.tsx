@@ -1,4 +1,4 @@
-import React, { useState, useRef, ReactNode } from 'react';
+import React, { useState, useRef, ReactNode, useMemo } from 'react';
 import {
   View,
   ScrollView,
@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   NativeSyntheticEvent,
   NativeScrollEvent,
-  ImageSourcePropType,
+
 } from 'react-native';
 import { ThemedView } from './ThemedView';
 import { ThemedText } from './ThemedText';
@@ -34,8 +34,25 @@ export function ImageGallery({ items }: ImageGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollViewRef = useRef<ScrollView>(null);
   const { theme } = useThemeManager();
+  const [disableScrollListener, setDisableScrollListener] = useState(false);
+
+  // Synchronize ScrollView position when activeIndex changes from dot press
+  // useEffect(() => {
+  //   if (disableScrollListener) {
+  //     // scrollViewRef.current?.scrollTo({ x: width * activeIndex, animated: true });
+      
+  //     // Re-enable scroll listener after animation completes
+  //     const timer = setTimeout(() => {
+  //       setDisableScrollListener(false);
+  //     }, 500);
+      
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [activeIndex, disableScrollListener]);
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    if (disableScrollListener) return;
+    
     const contentOffsetX = event.nativeEvent.contentOffset.x;
     const newIndex = Math.round(contentOffsetX / width);
     if (newIndex !== activeIndex) {
@@ -44,9 +61,21 @@ export function ImageGallery({ items }: ImageGalleryProps) {
   };
 
   const handleDotPress = (index: number) => {
-    scrollViewRef.current?.scrollTo({ x: width * index, animated: true });
+    // Commented out scrolling functionality
+    // scrollViewRef.current?.scrollTo({ x: width * index, animated: true });
+    
+    // Update the active index which will trigger the useEffect to update the scroll position
     setActiveIndex(index);
   };
+
+  const slides = useMemo(() => {
+    const image = items[activeIndex].image
+    return items.map((item) => (
+      <View key={item.id} style={styles.slide}>
+        <Image source={{ uri: image }} style={styles.image} resizeMode="cover" />
+      </View>
+    ))
+  }, [items, activeIndex])
 
   return (
     <ThemedView style={styles.container}>
@@ -66,29 +95,24 @@ export function ImageGallery({ items }: ImageGalleryProps) {
             scrollEventThrottle={16}
             style={styles.scrollView}
           >
-            {items.map((item) => (
-              <View key={item.id} style={styles.slide}>
-                <Image source={{ uri: item.image }} style={styles.image} resizeMode="cover" />
-            
-              </View>
-            ))}
+          {slides}            
           </ScrollView>
-                <View style={styles.paginationContainer}>
-          {items.map((_, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.dot,
-                index === activeIndex && styles.activeDot,
-                { backgroundColor: index === activeIndex 
-                  ? (theme === 'light' ? '#ff0000' : '#fff') 
-                  : (theme === 'light' ? '#CCCCCC' : '#666666') 
-                }
-              ]}
-              onPress={() => handleDotPress(index)}
-            />
-          ))}
-        </View>
+            <View style={styles.paginationContainer}>
+              {items.map((_, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.dot,
+                    index === activeIndex && styles.activeDot,
+                    { backgroundColor: index === activeIndex 
+                      ? (theme === 'light' ? '#ff0000' : '#fff') 
+                      : (theme === 'light' ? '#CCCCCC' : '#666666') 
+                    }
+                  ]}
+                  onPress={() => handleDotPress(index)}
+                />
+              ))}
+          </View>
           
         </View>
         
@@ -148,8 +172,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   activeDot: {
-    width: 12,
-    height: 12,
+    width: 10,
+    height: 10,
     borderRadius: 6,
   },
   contentContainer: {
